@@ -1,7 +1,7 @@
 # MathSnap
 
 [![npm version](https://img.shields.io/npm/v/mathsnap.svg)](https://www.npmjs.com/package/mathsnap)
-[![license](https://img.shields.io/npm/l/mathsnap.svg)](https://github.com/yourusername/mathsnap/blob/main/LICENSE)
+[![license](https://img.shields.io/npm/l/mathsnap.svg)](https://github.com/sinhaparth5/mathsnap/blob/master/LICENSE)
 
 MathSnap is a lightweight, framework-agnostic wrapper around [KaTeX](https://katex.org/) that makes it easy to render beautiful math equations in your web applications. Works with React, Svelte, Vue, and vanilla JavaScript.
 

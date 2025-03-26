@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { onMount, afterUpdate } from "svelte";
     import { renderMath, sanitizeEquation } from "../core/renderMaths";
     import type { MathOptions } from "../core/types";
     import 'katex/dist/katex.min.css';
