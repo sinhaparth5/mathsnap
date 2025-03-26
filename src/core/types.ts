@@ -1,4 +1,4 @@
-import { KatexOptions } from "katex";
+import type { KatexOptions } from "katex";
 import React from "react";
 
 /**

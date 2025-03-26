@@ -1,5 +1,5 @@
 import katex from 'katex';
-import { MathOptions, MathError } from './types';
+import type { MathOptions, MathError } from './types';
 
 /**
  * Renders a LaTeX math equation to HTML string using KaTeX
