@@ -9,6 +9,7 @@ lib/
 es/
 coverage/
 *.tsbuildinfo
+copy.js
 
 # Logs
 logs
