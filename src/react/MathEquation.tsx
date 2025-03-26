@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { renderMath, sanitizeEquation } from "../core/renderMaths";
-import { MathOptions } from "../core/types";
+import type { MathOptions } from "../core/types";
 import 'katex/dist/katex.min.css';
 
 export interface MathEquationProps extends Omit<MathOptions, 'style'> {
