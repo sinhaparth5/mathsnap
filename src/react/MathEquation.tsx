@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { renderMath, sanitizedEquation } from "../core/renderMaths";
+import { renderMath, sanitizeEquation } from "../core/renderMaths";
 import { MathOptions } from "../core/types";
 import 'katex/dist/katex.min.css';
 
@@ -31,7 +31,7 @@ export const MathEquation: React.FC<MathEquationProps> = ({
     const [htmlContent, setHtmlContent] = useState<string>('');
     useEffect(() => {
         // Sanitize the equation first
-        const cleanEquation = sanitizedEquation(equation);
+        const cleanEquation = sanitizeEquation(equation);
         // Generate the HTML
         const { html } = renderMath({
             equation: cleanEquation,

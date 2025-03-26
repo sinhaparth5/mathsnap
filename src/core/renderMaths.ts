@@ -68,7 +68,7 @@ export function isValidEquation(equation: string): boolean {
  * @param equation - The input equation
  * @returns The sanitized equation
  */
-export function sanitizedEquation(equation: string): string {
+export function sanitizeEquation(equation: string): string {
     return equation
         .replace(/<script[^>]*>.*?<\/script>/gi, '')
         .replace(/<\/?[^>]+(>|$)/g, '');
