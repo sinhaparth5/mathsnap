@@ -50,3 +50,8 @@ export const equations = {
     schrodinger: 'i\\hbar\\frac{\\partial}{\\partial t}\\Psi(\\vec{r},t) = \\hat{H}\\Psi(\\vec{r},t)',
 }
 
+/** Error state for math rendering */
+export interface MathError {
+    hasError: boolean;
+    message: string;
+}
