@@ -1,0 +1,61 @@
+{
+  "name": "mathsnap",
+  "version": "1.0.0",
+  "description": "The goal is to provide a reusable component that abstracts away KaTeX configuration and makes it easy to use",
+  "keywords": [
+    "katex",
+    "latex",
+    "maths",
+    "equations",
+    "react",
+    "svelte",
+    "vue"
+  ],
+  "homepage": "https://github.com/sinhaparth5/mathsnap#readme",
+  "bugs": {
+    "url": "https://github.com/sinhaparth5/mathsnap/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sinhaparth5/mathsnap.git"
+  },
+  "license": "MIT",
+  "author": "Parth Sinha",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "clean": "rimraf dist",
+    "prebuild": "npm run clean",
+    "prepublishOnly": "npm run build",
+    "test": "jest"
+  },
+  "dependencies": {
+    "katex": "^0.16.21"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.3",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-typescript": "^12.1.2",
+    "@types/jest": "^29.5.14",
+    "@types/katex": "^0.16.7",
+    "@types/react": "^19.0.12",
+    "jest": "^29.7.0",
+    "rimraf": "^6.0.1",
+    "rollup": "^2.79.2",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-terser": "^7.0.2",
+    "svelte": "^5.25.3",
+    "ts-jest": "^29.3.0",
+    "tslib": "^2.8.1",
+    "typescript": "^5.8.2",
+    "vue": "*"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "vue": "^3.5.13"
+  }
+}
