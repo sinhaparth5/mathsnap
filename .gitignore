@@ -73,3 +73,6 @@ coverage/
 # Misc
 .DS_Store
 Thumbs.db
+
+# Extra files
+*.zip
