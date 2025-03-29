@@ -13,47 +13,59 @@ export default defineConfig({
     // Generate TypeScript declaration files
     dts({
       include: ['src/**/*.ts', 'src/**/*.tsx'],
-      exclude: ['src/**/*.svelte', 'src/**/*.vue'],
+      exclude: ['src/**/*.svelte', 'src/**/*.vue', 'node_modules/**/*'],
+      rollupTypes: true,
     }),
     // Framework plugins
-    react(),
-    svelte(),
+    react({
+      babel: {
+        presets: ['@babel/preset-typescript']
+      },
+      jsxRuntime: 'automatic'
+    }),
+    svelte({
+      // Use updated Svelte compiler options
+      compilerOptions: {
+        dev: false,
+        css: 'external' // Fixed: use string value instead of boolean
+      },
+      emitCss: false
+    }),
     vue(),
   ],
-  // External dependencies that shouldn't be bundled
   build: {
     lib: {
-      // Define entry points
       entry: {
         // Main package
         'index': resolve(__dirname, 'src/index.ts'),
         
-        // React entry point 
-        'react/index': resolve(__dirname, 'src/react/MathEquation.tsx'),
-        
-        // Svelte entry point
-        'svelte/MathEquation.svelte': resolve(__dirname, 'src/svelte/MathEquation.svelte'),
-        'svelte/index': resolve(__dirname, 'src/svelte/index.js'),
-        
-        // Vue entry point
-        'vue/MathEquation.vue': resolve(__dirname, 'src/vue/MathEquation.vue'),
-        'vue/index': resolve(__dirname, 'src/vue/index.js'),
+        // Framework entry points - DO NOT include actual components
+        'react/index': resolve(__dirname, 'src/react/index.ts'),
+        'svelte/index': resolve(__dirname, 'src/svelte/index.ts'),
+        'vue/index': resolve(__dirname, 'src/vue/index.ts'),
       },
       formats: ['es', 'cjs'],
       fileName: (format, entryName) => {
-        // Handle special case for .svelte and .vue files
-        if (entryName.endsWith('.svelte') || entryName.endsWith('.vue')) {
-          return `${entryName}`;
-        }
         return `${entryName}.${format === 'es' ? 'mjs' : 'cjs'}`;
       }
     },
     rollupOptions: {
-      external: ['react', 'react-dom', 'svelte', 'vue', 'katex'],
+      // CRITICAL: Mark ALL framework code as external
+      external: [
+        'react', 
+        'react-dom', 
+        'svelte', 
+        'vue', 
+        'katex',
+        /^svelte\/.*$/,  // Important: exclude ALL svelte internal imports
+        /^vue\/.*$/      // Important: exclude ALL vue internal imports
+      ],
       output: {
         preserveModules: true,
         preserveModulesRoot: 'src',
         exports: 'named',
+        // Important: Do not bundle node_modules
+        hoistTransitiveImports: false,
         // Provide global names for externalized deps
         globals: {
           react: 'React',
@@ -68,8 +80,12 @@ export default defineConfig({
     emptyOutDir: true,
     sourcemap: true,
   },
-  // Handle Svelte and Vue files separately
   optimizeDeps: {
-    exclude: ['svelte', 'vue']
+    exclude: ['svelte', 'vue', 'react', 'react-dom']
   },
+  esbuild: {
+    loader: 'tsx',
+    target: 'es2020',
+    keepNames: false
+  }
 });

@@ -1,8 +1,8 @@
 <script lang="ts">
   import { renderMath, sanitizeEquation } from "../core/renderMaths";
   import type { MathOptions } from "../core/types";
-  import 'katex/dist/katex.min.css';
-
+  import { onMount } from "svelte";
+  
   // Component props
   export let equation: string;
   export let displayMode: boolean = false;
@@ -15,6 +15,7 @@
   let htmlContent: string = '';
   let errorMessage: string = '';
   let hasError: boolean = false;
+  let isMounted: boolean = false;
   
   // Handler for errors
   function handleError(error: Error) {
@@ -22,23 +23,25 @@
       hasError = true;
   }
   
-  // Update the rendered equation when props change
-  $: {
+  // Only render on the client side
+  onMount(() => {
+      isMounted = true;
+      
       // Sanitize the equation
       const cleanEquation = sanitizeEquation(equation);
       
       // Generate the HTML
       const result = renderMath({
-      equation: cleanEquation,
-      displayMode,
-      katexOptions,
-      onError: handleError
+          equation: cleanEquation,
+          displayMode,
+          katexOptions,
+          onError: handleError
       });
       
       htmlContent = result.html;
       hasError = result.error.hasError;
       errorMessage = result.error.message;
-  }
+  });
   
   // Computed styles for responsiveness
   $: containerStyle = `
@@ -48,28 +51,49 @@
       ${style}
   `;
 </script>
-<!-- Dynamic container based on 'as' prop -->
-{#if as === 'div'}
-<div 
-  class="mathsnap-equation {displayMode ? 'mathsnap-display' : 'mathsnap-inline'} {className}"
-  style={containerStyle}
->
-  {@html htmlContent}
-</div>
-{:else if as === 'p'}
-<p 
-  class="mathsnap-equation {displayMode ? 'mathsnap-display' : 'mathsnap-inline'} {className}"
-  style={containerStyle}
->
-  {@html htmlContent}
-</p>
+
+<!-- Only render HTML content when mounted (client-side) -->
+{#if isMounted}
+  {#if as === 'div'}
+    <div 
+      class="mathsnap-equation {displayMode ? 'mathsnap-display' : 'mathsnap-inline'} {className}"
+      style={containerStyle}
+    >
+      {@html htmlContent}
+    </div>
+  {:else if as === 'p'}
+    <p 
+      class="mathsnap-equation {displayMode ? 'mathsnap-display' : 'mathsnap-inline'} {className}"
+      style={containerStyle}
+    >
+      {@html htmlContent}
+    </p>
+  {:else}
+    <span 
+      class="mathsnap-equation {displayMode ? 'mathsnap-display' : 'mathsnap-inline'} {className}"
+      style={containerStyle}
+    >
+      {@html htmlContent}
+    </span>
+  {/if}
 {:else}
-<span 
-  class="mathsnap-equation {displayMode ? 'mathsnap-display' : 'mathsnap-inline'} {className}"
-  style={containerStyle}
->
-  {@html htmlContent}
-</span>
+  <!-- Placeholder during SSR -->
+  {#if as === 'div'}
+    <div 
+      class="mathsnap-equation {displayMode ? 'mathsnap-display' : 'mathsnap-inline'} {className}"
+      style={containerStyle}
+    ></div>
+  {:else if as === 'p'}
+    <p 
+      class="mathsnap-equation {displayMode ? 'mathsnap-display' : 'mathsnap-inline'} {className}"
+      style={containerStyle}
+    ></p>
+  {:else}
+    <span 
+      class="mathsnap-equation {displayMode ? 'mathsnap-display' : 'mathsnap-inline'} {className}"
+      style={containerStyle}
+    ></span>
+  {/if}
 {/if}
 
 <style>

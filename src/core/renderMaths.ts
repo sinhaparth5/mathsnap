@@ -1,6 +1,9 @@
 import katex from 'katex';
 import type { MathOptions, MathError } from './types';
 
+// Check if we're in a browser environment
+const isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
+
 /**
  * Renders a LaTeX math equation to HTML string using KaTeX
  * 
@@ -8,6 +11,17 @@ import type { MathOptions, MathError } from './types';
  * @returns The rendered HTML string
  */
 export function renderMath(options: MathOptions): { html: string; error: MathError } {
+    // If we're not in a browser, return an empty string (for SSR)
+    if (!isBrowser) {
+        return {
+            html: '',
+            error: {
+                hasError: false,
+                message: ''
+            }
+        };
+    }
+
     const {
         equation,
         displayMode = false,
@@ -54,6 +68,11 @@ export function renderMath(options: MathOptions): { html: string; error: MathErr
  * @returns Whether the equation is valid
  */
 export function isValidEquation(equation: string): boolean {
+    // If we're not in a browser, return true (for SSR)
+    if (!isBrowser) {
+        return true;
+    }
+
     try {
         katex.renderToString(equation, { throwOnError: true });
         return true;

@@ -1,6 +1,6 @@
 {
   "name": "mathsnap",
-  "version": "1.0.1",
+  "version": "1.0.5",
   "description": "The goal is to provide a reusable component that abstracts away KaTeX configuration and makes it easy to use",
   "keywords": [
     "katex",
@@ -55,7 +55,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node copy.js",
+    "build": "node build.js",
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
     "prepublishOnly": "npm run build",
@@ -65,6 +65,10 @@
     "katex": "^0.16.21"
   },
   "devDependencies": {
+    "@babel/core": "^7.26.10",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-react": "^7.26.3",
+    "@babel/preset-typescript": "^7.27.0",
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
     "@types/jest": "^29.5.14",
     "@types/katex": "^0.16.7",
