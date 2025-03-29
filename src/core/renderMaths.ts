@@ -29,7 +29,7 @@ export function renderMath(options: MathOptions): { html: string; error: MathErr
         });
         return { html, error };
     } catch (err) {
-        const message = err instanceof Error ? err.message : 'Unknow error rendering equation';
+        const message = err instanceof Error ? err.message : 'Unknown error rendering equation';
         // Call the error callback if provided
         if (options.onError && err instanceof Error) {
             options.onError(err);

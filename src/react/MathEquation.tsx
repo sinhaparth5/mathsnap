@@ -3,7 +3,8 @@ import { renderMath, sanitizeEquation } from "../core/renderMaths";
 import type { MathOptions } from "../core/types";
 import 'katex/dist/katex.min.css';
 
-export interface MathEquationProps extends Omit<MathOptions, 'style'> {
+// Use a React-specific name to avoid type conflicts
+export interface ReactMathEquationProps extends Omit<MathOptions, 'style'> {
     /**
      * React-specific style prop
      */
@@ -19,7 +20,7 @@ export interface MathEquationProps extends Omit<MathOptions, 'style'> {
 /**
  * React component for rendering mathematical equations
  */
-export const MathEquation: React.FC<MathEquationProps> = ({
+export const MathEquation: React.FC<ReactMathEquationProps> = ({
     equation,
     displayMode = false,
     className = '',
@@ -29,9 +30,11 @@ export const MathEquation: React.FC<MathEquationProps> = ({
     as
 }) => {
     const [htmlContent, setHtmlContent] = useState<string>('');
+    
     useEffect(() => {
         // Sanitize the equation first
         const cleanEquation = sanitizeEquation(equation);
+        
         // Generate the HTML
         const { html } = renderMath({
             equation: cleanEquation,
@@ -39,10 +42,13 @@ export const MathEquation: React.FC<MathEquationProps> = ({
             katexOptions,
             onError
         });
+        
         setHtmlContent(html);
     }, [equation, displayMode, katexOptions, onError]);
+    
     // Determine the container element
     const Container = as || (displayMode ? 'div' : 'span');
+    
     // Responsive styles
     const responsiveStyle: React.CSSProperties = {
         ...style,
@@ -57,7 +63,8 @@ export const MathEquation: React.FC<MathEquationProps> = ({
             style={responsiveStyle}
             dangerouslySetInnerHTML={{__html: htmlContent}}
         />
-    )
-}
+    );
+};
 
+// Default export for easier importing
 export default MathEquation;
