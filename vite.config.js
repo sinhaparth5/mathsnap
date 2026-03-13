@@ -14,7 +14,6 @@ export default defineConfig({
     dts({
       include: ['src/**/*.ts', 'src/**/*.tsx'],
       exclude: ['src/**/*.svelte', 'src/**/*.vue', 'node_modules/**/*'],
-      rollupTypes: true,
     }),
     // Framework plugins
     react({
@@ -52,13 +51,16 @@ export default defineConfig({
     rollupOptions: {
       // CRITICAL: Mark ALL framework code as external
       external: [
-        'react', 
-        'react-dom', 
-        'svelte', 
-        'vue', 
+        'react',
+        'react-dom',
+        'react/jsx-runtime',
+        'react/jsx-dev-runtime',
+        'svelte',
+        'vue',
         'katex',
-        /^svelte\/.*$/,  // Important: exclude ALL svelte internal imports
-        /^vue\/.*$/      // Important: exclude ALL vue internal imports
+        /^svelte\/.*$/,
+        /^vue\/.*$/,
+        /^react\/.*$/,
       ],
       output: {
         preserveModules: true,

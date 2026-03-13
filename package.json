@@ -1,6 +1,6 @@
 {
   "name": "mathsnap",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "The goal is to provide a reusable component that abstracts away KaTeX configuration and makes it easy to use",
   "keywords": [
     "katex",
@@ -23,8 +23,8 @@
   "author": "Parth Sinha",
   "type": "module",
   "main": "dist/index.cjs",
-  "types": "dist/index.mjs",
-  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "module": "dist/index.mjs",
   "files": [
     "dist",
     "src/svelte",
@@ -43,9 +43,9 @@
     },
     "./svelte": {
       "types": "./dist/svelte/index.d.ts",
+      "svelte": "./dist/svelte/MathEquation.svelte",
       "import": "./dist/svelte/index.mjs",
-      "require": "./dist/svelte/index.cjs",
-      "svelte": "./dist/svelte/MathEquation.svelte"
+      "require": "./dist/svelte/index.cjs"
     },
     "./vue": {
       "types": "./dist/vue/index.d.ts",

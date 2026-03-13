@@ -1,5 +1,6 @@
 import type { KatexOptions } from "katex";
-import type { CSSProperties } from "react";
+
+type CSSProperties = Record<string, string | number | undefined>;
 
 /**
  * Basic options for rendering math equations with mathsnap
