@@ -10,7 +10,6 @@
 <script lang="ts">
 import { defineComponent, computed, watchEffect, ref } from "vue";
 import { renderMath, sanitizeEquation } from "../core/renderMaths";
-import "katex/dist/katex.min.css";
 
 export default defineComponent({
   name: "MathEquation",

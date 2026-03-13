@@ -69,6 +69,31 @@ filesToRemove.forEach(file => {
   }
 });
 
+// Copy KaTeX CSS and fonts directly (avoids Vite font-inlining which inflates size 60x)
+console.log('Copying KaTeX CSS and fonts...');
+const katexDistSrc = path.join(__dirname, 'node_modules/katex/dist');
+const katexCssSrc  = path.join(katexDistSrc, 'katex.min.css');
+const katexCssDest = path.join(__dirname, 'dist/mathsnap.min.css');
+const fontsSrc     = path.join(katexDistSrc, 'fonts');
+const fontsDest    = path.join(__dirname, 'dist/fonts');
+
+fs.copyFileSync(katexCssSrc, katexCssDest);
+console.log(`Copied katex.min.css -> dist/mathsnap.min.css`);
+
+// Copy fonts directory recursively
+if (fs.existsSync(fontsDest)) {
+  fs.rmSync(fontsDest, { recursive: true });
+}
+fs.cpSync(fontsSrc, fontsDest, { recursive: true });
+console.log(`Copied fonts/ -> dist/fonts/`);
+
+// Remove the Vite-generated CSS (it has fonts baked in as base64 — we don't want it)
+const viteCss = path.join(__dirname, 'dist/mathsnap.css');
+if (fs.existsSync(viteCss)) {
+  fs.unlinkSync(viteCss);
+  console.log('Removed inflated dist/mathsnap.css');
+}
+
 // Create declaration files
 console.log('Creating declaration files...');
 

@@ -1,5 +1,3 @@
-import 'katex/dist/katex.min.css';
-
 // Import functions for re-export
 import { renderMath, isValidEquation, sanitizeEquation } from './core/renderMaths';
 import { equations } from './core/types';
