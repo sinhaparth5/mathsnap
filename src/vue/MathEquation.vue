@@ -8,11 +8,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, watchEffect, ref } from "vue";
-import { renderMath, sanitizeEquation } from "../core/renderMaths";
+import { defineComponent, computed, watch } from "vue";
+import { renderMath } from "../core/renderMaths";
 
 export default defineComponent({
   name: "MathEquation",
+  emits: ["error"],
   props: {
     equation: {
       type: String,
@@ -41,18 +42,11 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
-    // Internal state
-    const htmlContent = ref("");
-    const hasError = ref(false);
-    const errorMessage = ref("");
-
-    // Determine the container component
     const containerComponent = computed(() => {
       if (props.as) return props.as;
       return props.displayMode ? "div" : "span";
     });
 
-    // Computed classes
     const containerClass = computed(() => {
       return {
         "mathsnap-equation": true,
@@ -62,7 +56,6 @@ export default defineComponent({
       };
     });
 
-    // Computed styles with responsiveness
     const containerStyle = computed(() => {
       return {
         maxWidth: "100%",
@@ -72,35 +65,27 @@ export default defineComponent({
       };
     });
 
-    // Error handler
-    const handleError = (error: Error) => {
-      errorMessage.value = error.message;
-      hasError.value = true;
-      emit("error", error);
-    };
-
-    // Watch for changes to the equation and re-render
-    watchEffect(() => {
-      // Sanitize the equation
-      const cleanEquation = sanitizeEquation(props.equation);
-
-      // Generate the HTML
-      const result = renderMath({
-        equation: cleanEquation,
+    const renderResult = computed(() =>
+      renderMath({
+        equation: props.equation,
         displayMode: props.displayMode,
         katexOptions: props.katexOptions,
-        onError: handleError,
-      });
+      })
+    );
 
-      htmlContent.value = result.html;
-      hasError.value = result.error.hasError;
-      errorMessage.value = result.error.message;
-    });
+    watch(
+      () => renderResult.value.error.message,
+      (message, previousMessage) => {
+        if (renderResult.value.error.hasError && message !== previousMessage) {
+          emit("error", new Error(message));
+        }
+      }
+    );
 
     return {
-      htmlContent,
-      hasError,
-      errorMessage,
+      htmlContent: computed(() => renderResult.value.html),
+      hasError: computed(() => renderResult.value.error.hasError),
+      errorMessage: computed(() => renderResult.value.error.message),
       containerComponent,
       containerClass,
       containerStyle,

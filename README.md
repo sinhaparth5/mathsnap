@@ -74,12 +74,22 @@ export default function App() {
 }
 ```
 
-You can also import directly from the main entry:
+You can also import directly from the main entry in either JSX or TSX:
 
 ```tsx
-import { ReactMathEquation, equations } from 'mathsnap';
+import { MathEquation, equations } from 'mathsnap';
 
-<ReactMathEquation equation={equations.euler} displayMode />
+<MathEquation equation={equations.euler} displayMode />
+```
+
+Plain JSX works the same way:
+
+```jsx
+import { MathEquation, equations } from 'mathsnap/react';
+
+export default function App() {
+  return <MathEquation equation={equations.einstein} />;
+}
 ```
 
 ---
@@ -159,6 +169,17 @@ const { html, error } = renderMath({
 if (!error.hasError) {
   container.innerHTML = html;
 }
+```
+
+JavaScript uses the same API:
+
+```js
+import { renderMath } from 'mathsnap';
+
+document.getElementById('math').innerHTML = renderMath({
+  equation: 'x^2 + y^2 = z^2',
+  displayMode: true,
+}).html;
 ```
 
 ---

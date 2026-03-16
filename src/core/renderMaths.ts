@@ -1,8 +1,14 @@
 import katex from 'katex';
 import type { MathOptions, MathError } from './types';
 
-// Check if we're in a browser environment
-const isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
+function escapeHtml(value: string): string {
+    return value
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
 
 /**
  * Renders a LaTeX math equation to HTML string using KaTeX
@@ -11,22 +17,12 @@ const isBrowser = typeof window !== 'undefined' && typeof document !== 'undefine
  * @returns The rendered HTML string
  */
 export function renderMath(options: MathOptions): { html: string; error: MathError } {
-    // If we're not in a browser, return an empty string (for SSR)
-    if (!isBrowser) {
-        return {
-            html: '',
-            error: {
-                hasError: false,
-                message: ''
-            }
-        };
-    }
-
     const {
         equation,
         displayMode = false,
         katexOptions = {}
     } = options;
+    const sanitizedEquation = sanitizeEquation(equation);
 
     const error: MathError = {
         hasError: false,
@@ -34,7 +30,7 @@ export function renderMath(options: MathOptions): { html: string; error: MathErr
     };
 
     try {
-        const html = katex.renderToString(equation, {
+        const html = katex.renderToString(sanitizedEquation, {
             throwOnError: false,
             errorColor: '#f44336',
             displayMode,
@@ -49,7 +45,7 @@ export function renderMath(options: MathOptions): { html: string; error: MathErr
             options.onError(err);
         }
         // Create an error message as HTML
-        const html = `<span style="color: #f44336; border: 1px solid #f44336; padding: 2px 4px; border-radius: 4px; display: ${displayMode ? 'block' : 'inline-block'};">Error: ${message}</span>`;
+        const html = `<span style="color: #f44336; border: 1px solid #f44336; padding: 2px 4px; border-radius: 4px; display: ${displayMode ? 'block' : 'inline-block'};">Error: ${escapeHtml(message)}</span>`;
 
         return {
             html,
@@ -68,13 +64,8 @@ export function renderMath(options: MathOptions): { html: string; error: MathErr
  * @returns Whether the equation is valid
  */
 export function isValidEquation(equation: string): boolean {
-    // If we're not in a browser, return true (for SSR)
-    if (!isBrowser) {
-        return true;
-    }
-
     try {
-        katex.renderToString(equation, { throwOnError: true });
+        katex.renderToString(sanitizeEquation(equation), { throwOnError: true });
         return true;
     } catch (error) {
         return false;

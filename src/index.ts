@@ -8,6 +8,7 @@ export { equations } from './core/types';
 export type { MathOptions, MathError } from './core/types';
 
 // Export React component
+export { MathEquation } from './react/MathEquation';
 export { MathEquation as ReactMathEquation } from './react/MathEquation';
 export type { ReactMathEquationProps } from './react/MathEquation';
 

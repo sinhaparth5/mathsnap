@@ -48,6 +48,15 @@ describe('renderMath', () => {
         expect(error.hasError).toBe(false);
     });
 
+    it('sanitizes HTML input automatically before rendering', () => {
+        const { html, error } = renderMath({
+            equation: '<script>alert(1)</script>c^2',
+        });
+        expect(error.hasError).toBe(false);
+        expect(html).toContain('katex');
+        expect(html).not.toContain('<script>');
+    });
+
     it('returns an object with html and error keys', () => {
         const result = renderMath({ equation: 'a + b = c' });
         expect(result).toHaveProperty('html');
@@ -58,6 +67,10 @@ describe('renderMath', () => {
 });
 
 describe('isValidEquation', () => {
+    it('validates equations without requiring a browser environment', () => {
+        expect(isValidEquation('x^2')).toBe(true);
+    });
+
     it('returns true for simple valid equations', () => {
         expect(isValidEquation('x^2 + y^2 = z^2')).toBe(true);
         expect(isValidEquation('E = mc^2')).toBe(true);

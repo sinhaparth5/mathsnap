@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { renderMath, sanitizeEquation } from "../core/renderMaths";
+  import { renderMath } from "../core/renderMaths";
   import type { MathOptions } from "../core/types";
 
   interface Props {
@@ -22,22 +22,16 @@
     onError,
   }: Props = $props();
 
-  let htmlContent = $state('');
-
-  function handleError(error: Error) {
-    onError?.(error);
-  }
-
-  $effect(() => {
-    const cleanEquation = sanitizeEquation(equation);
-    const result = renderMath({
-      equation: cleanEquation,
+  const renderResult = $derived(
+    renderMath({
+      equation,
       displayMode,
       katexOptions,
-      onError: handleError,
-    });
-    htmlContent = result.html;
-  });
+      onError,
+    })
+  );
+
+  const htmlContent = $derived(renderResult.html);
 
   const containerEl = $derived(as ?? (displayMode ? 'div' : 'span'));
   const containerStyle = $derived(

@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { renderMath, sanitizeEquation } from "../core/renderMaths";
+import React from "react";
+import { renderMath } from "../core/renderMaths";
 import type { MathOptions } from "../core/types";
 
 export interface ReactMathEquationProps extends Omit<MathOptions, 'style'> {
@@ -16,22 +16,12 @@ export const MathEquation: React.FC<ReactMathEquationProps> = ({
     onError,
     as
 }) => {
-    const [htmlContent, setHtmlContent] = useState<string>('');
-    // Keep onError in a ref so it never causes re-renders
-    const onErrorRef = useRef(onError);
-    onErrorRef.current = onError;
-
-    useEffect(() => {
-        const cleanEquation = sanitizeEquation(equation);
-        const { html } = renderMath({
-            equation: cleanEquation,
-            displayMode,
-            katexOptions,
-            onError: onErrorRef.current,
-        });
-        setHtmlContent(html);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [equation, displayMode, JSON.stringify(katexOptions)]);
+    const { html } = renderMath({
+        equation,
+        displayMode,
+        katexOptions,
+        onError,
+    });
 
     const Container = as || (displayMode ? 'div' : 'span');
 
@@ -46,7 +36,7 @@ export const MathEquation: React.FC<ReactMathEquationProps> = ({
         <Container
             className={`mathsnap-equation ${displayMode ? 'mathsnap-display' : 'mathsnap-inline'} ${className}`}
             style={responsiveStyle}
-            dangerouslySetInnerHTML={{ __html: htmlContent }}
+            dangerouslySetInnerHTML={{ __html: html }}
         />
     );
 };
