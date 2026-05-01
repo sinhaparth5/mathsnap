@@ -1,6 +1,6 @@
 {
   "name": "mathsnap",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "The goal is to provide a reusable component that abstracts away KaTeX configuration and makes it easy to use",
   "keywords": [
     "katex",
