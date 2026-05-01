@@ -182,6 +182,60 @@ document.getElementById('math').innerHTML = renderMath({
 }).html;
 ```
 
+### Plain HTML via CDN
+
+Use the CSS file plus the browser bundle:
+
+```html
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/mathsnap@1.0.8/dist/mathsnap.min.css"
+/>
+
+<div id="math"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/mathsnap@1.0.8/dist/browser/mathsnap.min.js"></script>
+<script>
+  const result = MathSnap.renderMath({
+    equation: '\\int_0^1 x^2 \\, dx = \\frac{1}{3}',
+    displayMode: true,
+  });
+
+  document.getElementById('math').innerHTML = result.html;
+</script>
+```
+
+If you prefer modules in the browser:
+
+```html
+<script type="module">
+  import { renderMath } from 'https://cdn.jsdelivr.net/npm/mathsnap@1.0.8/dist/browser/mathsnap.esm.js';
+
+  document.getElementById('math').innerHTML = renderMath({
+    equation: 'x^2 + y^2 = z^2',
+    displayMode: true,
+  }).html;
+</script>
+```
+
+### GitHub Pages Link
+
+GitHub Packages is for package managers like `npm`, not for loading assets in the browser with `<script>` or `<link>`.
+For browser use, deploy the built `dist/` folder to GitHub Pages.
+
+This repo now includes a Pages workflow. Once Pages is enabled for the repository, your browser asset URLs will be:
+
+```html
+<link rel="stylesheet" href="https://sinhaparth5.github.io/mathsnap/mathsnap.min.css" />
+<script src="https://sinhaparth5.github.io/mathsnap/browser/mathsnap.min.js"></script>
+```
+
+There is also a demo page at:
+
+```text
+https://sinhaparth5.github.io/mathsnap/
+```
+
 ---
 
 ## Predefined Equations

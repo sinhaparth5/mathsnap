@@ -30,6 +30,12 @@ function copyFile(sourcePath, targetPath) {
   console.log(`Copied ${path.relative(__dirname, sourcePath)} -> ${path.relative(__dirname, targetPath)}`);
 }
 
+function copyDirectory(sourcePath, targetPath) {
+  ensureDir(path.dirname(targetPath));
+  fs.cpSync(sourcePath, targetPath, { recursive: true });
+  console.log(`Copied ${path.relative(__dirname, sourcePath)} -> ${path.relative(__dirname, targetPath)}`);
+}
+
 function pruneDistArtifacts() {
   console.log('Pruning duplicate and internal build artifacts...');
 
@@ -60,6 +66,20 @@ try {
   });
 } catch (error) {
   console.error('Error during Vite build:', error);
+  process.exit(1);
+}
+
+console.log('Running browser bundle build...');
+try {
+  execFileSync(
+    path.join(__dirname, 'node_modules', '.bin', 'vite'),
+    ['build', '--config', 'vite.browser.config.js'],
+    {
+      stdio: 'inherit',
+    }
+  );
+} catch (error) {
+  console.error('Error during browser bundle build:', error);
   process.exit(1);
 }
 
@@ -101,6 +121,13 @@ if (fs.existsSync(fontsDest)) {
 }
 fs.cpSync(fontsSrc, fontsDest, { recursive: true });
 console.log(`Copied fonts/ -> dist/fonts/`);
+
+// Copy Pages demo files so the dist directory can be deployed directly to GitHub Pages
+const pagesSrc = path.join(__dirname, 'pages');
+if (fs.existsSync(pagesSrc)) {
+  console.log('Copying Pages assets...');
+  copyDirectory(pagesSrc, distDir);
+}
 
 // Remove the Vite-generated CSS (it has fonts baked in as base64 — we don't want it)
 removePath(path.join(distDir, 'mathsnap.css'));
