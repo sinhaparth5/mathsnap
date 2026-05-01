@@ -3,9 +3,7 @@ name: Deploy Browser Assets to GitHub Pages
 on:
   push:
     branches:
-      - main
-    tags:
-      - 'v*'
+      - master
   workflow_dispatch:
 
 permissions:
